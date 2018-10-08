@@ -1,0 +1,28 @@
+# tf_nightly-gpu-py3:v1.0
+# FROM tensorflow/tensorflow:nightly-gpu-py3
+#   FROM nvidia/cuda:9.0-base-ubuntu16.04
+# Build:
+#   docker build -t tf_nightly_gpu_py3:v1.0  . -f Dockerfile_tf_nightly_gpu_py3.txt
+#   
+# Usage:
+#   nvidia-docker run -it --rm tf_nightly_gpu_py3:v1.0 bash
+#  
+
+FROM tensorflow/tensorflow:nightly-gpu-py3
+
+RUN  sed -i -e 's#://archive.ubuntu.com#://cn.archive.ubuntu.com#g' /etc/apt/sources.list \
+ && echo "install deps..." \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+       vim git ssh tmux curl inxi\
+       libsm6 libxext6 libxrender-dev python3-tk \
+      # for caffe
+      # protobuf-c-compiler libprotobuf-dev libleveldb-dev libsnappy-dev libhdf5-serial-dev protobuf-compiler gfortran libjpeg62 libfreeimage-dev libatlas-base-dev libgoogle-glog-dev libbz2-dev libxml2-dev libxslt-dev libffi-dev libssl-dev libgflags-dev liblmdb-dev python-yaml python-dev \ 
+  && pip install --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  && pip install setuptools -i https://pypi.tuna.tsinghua.edu.cn/simple \
+  && pip install numpy opencv-contrib-python scipy  protobuf imageio matplotlib sklearn  \
+        -i https://pypi.tuna.tsinghua.edu.cn/simple \
+ && echo "apt-get...done"
+
+##############################################################
+# dlib  scikit-image
